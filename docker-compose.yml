@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: hotel
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1488
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  bot:
+    build: ./bot
+    environment:
+      DB_HOST: "host.docker.internal"
+      DB_NAME: hotel
+      DB_USER: postgres
+      DB_PASSWORD: 1488
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}  # токен из терминала
+    depends_on:
+      - db
+
+volumes:
+  pg_data:
